@@ -83,7 +83,7 @@ public isVisible? = false
         } else {
           this.snackbar.open('Email atau Kata Sandi salah', 'oke', {
             duration: 3000,
-        panelClass: 'app-notification-error',
+            panelClass: 'app-notification-error',
           })
         }
       })
