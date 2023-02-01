@@ -1,6 +1,6 @@
 export const API_CONFIG = {
-  login: `/api/login`,
-  register: `/api/register`,
+  login: `/api/auth/login`,
+  register: `/api/auth/register`,
   news: {
     create: `/api/news`,
     base: `/api/news/`,
