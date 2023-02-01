@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-mdc-snack-bar-container {
+  --mat-mdc-snack-bar-button-color: #ffffff;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+
+}
+
+.app-notification-error {
+  --mdc-snackbar-container-color: #f23a2f;
+};
+
+.app-notification-success {
+  --mdc-snackbar-container-color: #43a446;
+}

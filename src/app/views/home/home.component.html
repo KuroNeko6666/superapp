@@ -1,0 +1,37 @@
+<div class="h-screen w-screen overflow-y-scroll scrollbar-hide" [ngClass]="theme.config.mode.layer">
+  <div class="xl:container mx-auto h-full p-3">
+    <div class="grid grid-cols-12 h-full  gap-3 relative">
+      <div class="p-4 rounded-lg col-span-6 lg:col-span-2 absolute lg:relative h-fit lg:h-full shadow"
+        [ngClass]="theme.config.mode.bg" *ngIf="sidebar">
+        <app-sidebar [theme]="theme" (closeSidebar)="closeSidebar()"></app-sidebar>
+      </div>
+      <div class="py-0 h-full col-span-12 overflow-y-scroll scrollbar-hide" [ngClass]="sidebar ? 'lg:col-span-10' : ''">
+        <div class="h-full gap-y-2 space-y-3 ">
+
+          <div class="p-2 px-4 rounded-lg shadow h-16 " [ngClass]="theme.config.mode.bg">
+            <div class="flex flex-row items-center h-full gap-x-3">
+              <button (click)="closeSidebar()">
+                <i class="fa-solid fa-bars flex-shrink-0 text-lg"></i>
+              </button>
+              <div class="flex items-center gap-x-2 flex-1">
+                <span class=" font-thin">Halo,</span>
+                <span class="text-lg font-bold">Agung Priyatno</span>
+              </div>
+              <button class="rounded-l px-3 py-2" [ngClass]="theme.config.color.bg" (click)="logout()">
+                Logout
+              </button>
+              <!-- <div class="h-10 w-10 rounded-full" [ngClass]="theme.config.color.bg_500">
+              </div> -->
+            </div>
+          </div>
+
+          <div class="">
+            <router-outlet></router-outlet>
+          </div>
+
+        </div>
+        <app-quick-setting (changeTheme)="changeTheme($event)" [theme]="theme"></app-quick-setting>
+      </div>
+    </div>
+  </div>
+</div>

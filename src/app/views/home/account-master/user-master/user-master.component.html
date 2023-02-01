@@ -1,0 +1,127 @@
+<div class="flex flex-col h-fit" *ngIf="!isLoading && !formMode">
+  <div class="flex flex-col h-fit">
+    <div class="flex flex-col p-3" [ngClass]="theme.config.mode.text">
+      <span class="text-2xl font-bold">User Management</span>
+      <span class="text-sm font-light">{{ currentPath }}</span>
+    </div>
+    <div class="p-3 rounded-lg flex flex-col overflow-x-scroll md:overflow-clip gap-y-3"
+      [ngClass]="theme.config.mode.bg">
+      <div class="flex flex-row items-center">
+        <span class="flex-1 font-bold">Tabel User</span>
+        <div class="basis-1/3 flex flex-row gap-x-3">
+          <input type="text" class="grow text-xs rounded-lg border-none focus:outline-none focus:ring-0"
+            placeholder="Search..."
+            [ngClass]="theme.data.mode == 'dark' ? 'bg-slate-500 placeholder:text-slate-200' : 'bg-slate-200'" [formControl]="searchForm">
+          <button class="inline-block bg-blue-500 rounded-lg p-2 text-sm text-slate-100" (click)="openForm()">
+            Tambah
+          </button>
+        </div>
+      </div>
+      <table class="h-fit text-sm min-w-96 table-fixed">
+        <thead [ngClass]="theme.data.mode == 'dark' ? theme.config.color.bg_700: theme.config.color.bg_300">
+          <tr class="text-left">
+            <th class="p-2">No</th>
+            <th class="p-2">Name</th>
+            <th class="p-2">Email</th>
+            <th class="p-2 text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of data; let i=index">
+            <tr
+              [ngClass]="i % 2 != 0 ? (theme.data.mode == 'dark' ? theme.config.color.bg_900: theme.config.color.bg_100) : '' ">
+              <td class="p-2 w-10 max-h-20">{{ i + 1 }}</td>
+              <td class="p-2">
+                <p class=" w-80 max-h-20 overflow-clip">{{ item.name }}</p>
+              </td>
+              <td class="p-2">
+                <p class="max-h-20 text-ellipsis overflow-clip">
+                  {{ item.email }}
+                </p>
+              </td>
+              <td class="p-2">
+                <div class="w-36 max-h-20 text-center space-x-2">
+                  <button class="inline-block bg-blue-500 rounded-full p-2 w-10 h-10 text-sm text-slate-100"
+                    (click)="edit(item)">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button class="inline-block bg-red-500 rounded-full p-2 w-10 h-10 text-sm text-slate-100" (click)="deleteItem(item.id!)">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <div class="flex flex-row items-center gap-2 justify-end">
+        <span class="text-sm">page {{ page + 1 }} of {{ paginateData?.length }}</span>
+        <button class="px-5" (click)="page > 0 ? changePage(false) : null">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="px-5">
+          <i class="fa-solid fa-chevron-right" (click)="page + 1 < paginateData!.length ? changePage(true) : null"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flex flex-col h-fit" *ngIf="formMode">
+  <div class="flex flex-col h-fit">
+    <!-- Header -->
+    <div class="flex flex-col p-3" [ngClass]="theme.config.mode.text">
+      <span class="text-2xl font-bold">{{ createMode? 'Tambah' : 'Ubah' }} User</span>
+      <span class="text-sm font-light">isi form untuk menambahkan User</span>
+    </div>
+    <!-- FORM -->
+    <form [formGroup]="form" (submit)="createMode ? create() : update()">
+      <div class="p-3 rounded-lg flex flex-col gap-y-3 mb-10" [ngClass]="theme.config.mode.bg">
+        <div class="flex flex-row items-center">
+          <span class="flex-1 font-bold">Form User</span>
+          <div class="basis-1/6 flex flex-col">
+            <button class="inline-block bg-red-500 rounded-lg p-2 text-sm text-slate-100" (click)="closeForm()">
+              Batal
+            </button>
+          </div>
+        </div>
+<!--  -->
+        <div class="flex flex-col gap-y-1">
+          <input type="text" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
+            placeholder="Nama..." [ngClass]="errorName" formControlName="name">
+          <span class="text-xs text-red-500" *ngIf="name?.hasError('required') && name?.touched">Judul Harus di
+            isi</span>
+        </div>
+
+        <div class="flex flex-col gap-y-1">
+          <input type="text" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
+            placeholder="Email..." [ngClass]="errorEmail" formControlName="email">
+          <span class="text-xs text-red-500" *ngIf="email?.hasError('required') && email?.touched">Judul Harus di
+            isi</span>
+        </div>
+
+        <div class="flex flex-col gap-y-1" *ngIf="createMode">
+          <input type="password" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
+            placeholder="Password..." [ngClass]="errorPassword" formControlName="password">
+          <span class="text-xs text-red-500" *ngIf="password?.hasError('required') && password?.touched">Judul Harus di
+            isi</span>
+        </div>
+
+        <div class="space-x-3 text-right">
+          <button class="inline-block bg-red-500 rounded-lg p-2 text-sm text-slate-100" (click)="closeForm()">
+            Batal
+          </button>
+          <button type="submit" class="inline-block bg-blue-500 rounded-lg p-2 text-sm text-slate-100" [disabled]="isLoading" [ngClass]="isLoadingForm ? 'bg-slate-500' : ''">
+            {{ (createMode && !isLoadingForm) ? 'Tambah' : isLoadingForm ? 'Mengunggah..' : 'Ubah'}}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="h-screen" *ngIf="isLoading">
+  <div class="flex items-center h-full">
+    <i class="fa-solid fa-spinner mx-auto my-auto text-3xl animate-spin" [ngClass]="theme.config.mode.text"></i>
+  </div>
+</div>

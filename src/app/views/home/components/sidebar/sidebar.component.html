@@ -1,0 +1,45 @@
+<div class="flex flex-col gap-y-5">
+  <div class="flex flex-row items-center gap-x-2">
+    <div class="w-10 h-10 flex-shrink-0">
+      <img src="/assets/logo/bawaslu-logo.png" alt="">
+    </div>
+    <div class="flex flex-col gap-0 flex-1">
+      <span class="text-lg font-bold">Superapp</span>
+      <span class="text-xs ">admin</span>
+    </div>
+    <button class="flex-shrink-0" (click)="close()">
+      <i class="fa-solid fa-circle-xmark  lg:hidden"></i>
+    </button>
+  </div>
+  <ul class="space-y-2 text-sm">
+    <ng-container *ngFor="let item of menu?.data">
+      <li class="rounded-lg" [ngClass]="!item.collapse ? selected : unSelected"
+        *ngIf="item.children.length == 0">
+        <a href="javascript:void(0)" class="px-3 py-2 flex items-center gap-x-3" (click)="navigate(item.path)">
+          <i class="flex-shrink-0" [ngClass]="item.icon"></i>
+          <span class="flex-1">{{ item.name }}</span>
+        </a>
+      </li>
+      <li class="rounded-lg" [ngClass]="!item.collapse ? unCollapse : currentPath?.includes(item.path) ? selected : unSelected"
+        *ngIf="item.children.length > 0">
+        <button class="w-full px-3 py-2 flex items-center gap-x-3" (click)="item.collapse = !item.collapse">
+          <i class="flex-shrink-0" [ngClass]="item.icon"></i>
+          <span class="flex-1 text-left">{{ item.name }}</span>
+          <i class="fa-solid fa-chevron-right flex-shrink-0" *ngIf="item.collapse"></i>
+          <i class="fa-solid fa-chevron-down flex-shrink-0" *ngIf="!item.collapse"></i>
+
+        </button>
+        <ul class="flex flex-col p-2 gap-y-2" *ngIf="!item.collapse">
+          <ng-container *ngFor="let subItem of item.children">
+            <li class="rounded-lg" [ngClass]="currentPath == subItem.path ? subSelected : ''">
+              <a href="javascript:void(0)" class="px-3 py-2 flex items-center gap-x-3"
+                (click)="navigate(subItem.path)">
+                <span class="flex-1">{{ subItem.name }}</span>
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+      </li>
+    </ng-container>
+  </ul>
+</div>

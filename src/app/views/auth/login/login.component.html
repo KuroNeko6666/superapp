@@ -1,0 +1,37 @@
+<div class="h-screen" [ngClass]="theme.config.mode.layer">
+  <form class="flex flex-row justify-center place-items-center h-full" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="basis-1/4 shadow-lg rounded-lg p-5 flex flex-col gap-y-2"  [ngClass]="theme.config.mode.bg">
+      <div class="w-10 h-10 self-center">
+        <img src="/assets/logo/bawaslu-logo.png" alt="">
+      </div>
+
+      <div class="flex flex-col mb-3 self-center text-center mb-5">
+        <span class="text-xl font-bold">Login</span>
+        <span class="text-xs text-slate-500">Masuk untuk melanjutkan</span>
+      </div>
+
+      <div class="flex flex-col gap-y-1">
+        <div class="flex flex-row bg-slate-100 gap-x-3 px-3 place-items-center rounded-lg" [ngClass]="(email?.touched && email?.hasError('required')) || email?.hasError('email') ? 'border-2 border-red-400' : ''">
+
+          <input type="email" class="focus:outline-none grow py-2 bg-transparent text-sm border-none focus:ring-0 focus:border-none" placeholder="Email" formControlName="email">
+          <!-- <fa-icon [icon]="icon.faMail" class="basis-1/8 text-center"></fa-icon> -->
+        </div>
+        <span class="text-red-500 text-xs ml-3" *ngIf="email?.hasError('required') && email?.touched">Email harus di isi!</span>
+        <span class="text-red-500 text-xs ml-3" *ngIf="email?.hasError('email')">Email tidak valid!</span>
+      </div>
+
+      <div class="flex flex-col gap-y-1">
+        <div class="flex flex-row bg-slate-100 gap-x-3 px-3 place-items-center rounded-lg" [ngClass]="(password?.touched && password?.hasError('required')) || password?.hasError('minlength') ? 'border-2 border-red-400' : ''">
+
+          <input [type]="isVisible? 'text' : 'password'" class="focus:outline-none grow py-2 bg-transparent text-sm border-none focus:ring-0 focus:border-none" placeholder="Password" formControlName="password">
+          <!-- <fa-icon [icon]="icon.faMail" class="basis-1/8 text-center"></fa-icon> -->
+          <button type="button" (click)="isVisible = !isVisible"><i class="fa-solid" [ngClass]="isVisible ? 'fa-eye-slash' : 'fa-eye'"></i></button>
+        </div>
+        <span class="text-red-500 text-xs ml-3" *ngIf="password?.hasError('required') && password?.touched">Password harus di isi!</span>
+        <span class="text-red-500 text-xs ml-3" *ngIf="password?.hasError('minlength')">Minimal 8 karakter!</span>
+      </div>
+
+      <button class="rounded-lg p-1 text-white" [ngClass]="theme.config.color.bg_500">login</button>
+    </div>
+  </form>
+</div>
