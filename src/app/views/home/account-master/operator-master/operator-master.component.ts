@@ -220,6 +220,7 @@ export class OperatorMasterComponent {
        this.deleteSubs = this.apiService.deleteAccount(id)
        .subscribe({
         next: (res) => {
+          console.log(res);
           if (res.message == 'Success') {
             this.resetForm()
             this.getData()

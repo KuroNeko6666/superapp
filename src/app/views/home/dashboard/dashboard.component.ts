@@ -136,19 +136,25 @@ export class DashboardComponent {
       }
     })
 
-    this.accounts!.forEach((val: UserModel) => {
-      let valDate = val.created_at!.split('T')[0].split('-')
-      console.log("increase");
-      if (valDate[0] == this.year.toString() && valDate[1] == this.month) {
-        for (let index = 0; index < 7; index++) {
-          if (valDate[2] == (this.date - index).toString()) {
-            this.weeklyUser![index] += 1
-
-          } else {
-            this.weeklyUser![index] += 0
-          }
+    this.accounts!.forEach((val: UserModel, i: number) => {
+      let valDate = val.created_at!.split('T')[0]
+      let datee = this.getLabelDataWeek()
+      datee.forEach((e, i) => {
+        if(valDate == e){
+          this.weeklyUser![i] += 1
         }
-      }
+      })
+
+      // if (valDate[0] == this.year.toString() && valDate[1] == this.month) {
+      //   for (let index = 0; index < 7; index++) {
+      //     if (valDate[2] == (this.date - index).toString()) {
+      //       this.weeklyUser![index] += 1
+
+      //     } else {
+      //       this.weeklyUser![index] += 0
+      //     }
+      //   }
+      // }
     })
   }
 
@@ -166,7 +172,9 @@ export class DashboardComponent {
   getLabelDataWeek() {
     let week = []
     for (let index = 0; index < 7; index++) {
-      week.push((this.date - index) + '-' + this.month + '-' + this.year)
+    let datee = new Date(new Date().setDate( new Date().getDate() - index)).toISOString()
+    let data = datee.split('T')[0]
+      week.push(data)
     }
     return week
   }

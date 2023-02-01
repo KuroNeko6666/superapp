@@ -75,11 +75,11 @@ export class ApiService {
   }
 
   updateAccount(data: UserInterface, id: number): Observable<ResponseModel>{
-    return this.http.put<ResponseModel>((this.url.user.base + id), data, {headers: this.headers})
+    return this.http.put<ResponseModel>((this.url.user.base + `/u/` + id), data, {headers: this.headers})
   }
 
   deleteAccount(id: number): Observable<ResponseModel>{
-    return this.http.delete<ResponseModel>((this.url.user.base + id), {headers: this.headers})
+    return this.http.delete<ResponseModel>((this.url.user.base + '/d/' + id), {headers: this.headers})
   }
 
   // ===== ACTIVITY SECTION ===== //
