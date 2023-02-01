@@ -74,7 +74,6 @@ public isVisible? = false
       }
       this.api.login(data).subscribe((res: ResponseModel) => {
         if(res.message == "Success"){
-          console.log(res);
           let credential : LoginModel = res.data as LoginModel
           if(credential.token != undefined){
             localStorage.setItem('keyToken', credential.token)
@@ -82,14 +81,17 @@ public isVisible? = false
             this.router.navigateByUrl('home/dashboard')
           }
         } else {
-          this.snackbar.open(res.data as string, 'oke', {
-            duration: 3000
+          this.snackbar.open('Email atau Kata Sandi salah', 'oke', {
+            duration: 3000,
+        panelClass: 'app-notification-error',
           })
         }
       })
     } else {
       this.snackbar.open('Isi terlebih dahulu', 'oke', {
-        duration: 3000
+        duration: 3000,
+        panelClass: 'app-notification-error',
+
       })
     }
   }

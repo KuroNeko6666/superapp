@@ -1,13 +1,13 @@
 <div class="flex flex-col h-fit" *ngIf="!isLoading && !formMode">
   <div class="flex flex-col h-fit">
     <div class="flex flex-col p-3" [ngClass]="theme.config.mode.text">
-      <span class="text-2xl font-bold">Activity Management</span>
+      <span class="text-2xl font-bold">Manajemen Aktivitas</span>
       <span class="text-sm font-light">{{ currentPath }}</span>
     </div>
     <div class="p-3 rounded-lg flex flex-col overflow-x-scroll md:overflow-clip gap-y-3"
       [ngClass]="theme.config.mode.bg">
       <div class="flex flex-row items-center">
-        <span class="flex-1 font-bold">Tabel Activity</span>
+        <span class="flex-1 font-bold">Tabel Aktivitas</span>
         <div class="basis-1/3 flex flex-row gap-x-3">
           <input type="text" class="grow text-xs rounded-lg border-none focus:outline-none focus:ring-0"
             placeholder="Search..."
@@ -63,7 +63,7 @@
         </tbody>
       </table>
       <div class="flex flex-row items-center gap-2 justify-end">
-        <span class="text-sm">page {{ page + 1 }} of {{ paginateData?.length }}</span>
+        <span class="text-sm">halaman {{ page + 1 }} dari {{ paginateData?.length }}</span>
         <button class="px-5" (click)="page > 0 ? changePage(false) : null">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
@@ -79,14 +79,14 @@
   <div class="flex flex-col h-fit">
     <!-- Header -->
     <div class="flex flex-col p-3" [ngClass]="theme.config.mode.text">
-      <span class="text-2xl font-bold">{{ createMode? 'Tambah' : 'Ubah' }} Activity</span>
-      <span class="text-sm font-light">isi form untuk menambahkan Activity</span>
+      <span class="text-2xl font-bold">{{ createMode? 'Tambah' : 'Ubah' }} Aktivitas</span>
+      <span class="text-sm font-light">isi form untuk menambahkan Aktivitas</span>
     </div>
     <!-- FORM -->
     <form [formGroup]="form" (submit)="createMode ? create() : update()">
       <div class="p-3 rounded-lg flex flex-col gap-y-3 mb-10" [ngClass]="theme.config.mode.bg">
         <div class="flex flex-row items-center">
-          <span class="flex-1 font-bold">Form Activity</span>
+          <span class="flex-1 font-bold">Form Aktivitas</span>
           <div class="basis-1/6 flex flex-col">
             <button class="inline-block bg-red-500 rounded-lg p-2 text-sm text-slate-100" (click)="closeForm()">
               Batal

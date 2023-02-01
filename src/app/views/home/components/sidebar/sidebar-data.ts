@@ -8,34 +8,34 @@ export class MENU_DATA {
       children: [],
     },
     {
-      name: 'Account Master',
+      name: 'Manajemen Akun',
       path: '/home/account-master/',
       icon: 'fa-solid fa-users-gear',
       collapse: true,
       children: [
         {
-          name: 'User Master',
+          name: 'User',
           path: '/home/account-master/user',
         },
         {
-          name: 'Operator Master',
+          name: 'Operator',
           path: '/home/account-master/operator',
         },
         {
-          name: 'Admin Master',
+          name: 'Admin',
           path: '/home/account-master/admin',
         },
       ],
     },
     {
-      name: 'News Master',
+      name: 'Manajemen Berita',
       path: '/home/news-master',
       icon: 'fa-solid fa-newspaper',
       collapse: true,
       children: [],
     },
     {
-      name: 'Activity Master',
+      name: 'Manajemen Aktivitas',
       path: '/home/activity-master',
       icon: 'fa-solid fa-calendar',
       collapse: true,

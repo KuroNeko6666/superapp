@@ -321,7 +321,7 @@ export class AdminMasterComponent {
     } else {
       this.snackbar.open("Aksi Gagal dijalankan", "oke",{
         duration: 5000,
-        panelClass: 'app-notification-success',
+        panelClass: 'app-notification-error',
       })
     }
   }

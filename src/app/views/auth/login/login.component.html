@@ -6,7 +6,7 @@
       </div>
 
       <div class="flex flex-col mb-3 self-center text-center mb-5">
-        <span class="text-xl font-bold">Login</span>
+        <span class="text-xl font-bold">Halaman Masuk</span>
         <span class="text-xs text-slate-500">Masuk untuk melanjutkan</span>
       </div>
 
@@ -23,15 +23,15 @@
       <div class="flex flex-col gap-y-1">
         <div class="flex flex-row bg-slate-100 gap-x-3 px-3 place-items-center rounded-lg" [ngClass]="(password?.touched && password?.hasError('required')) || password?.hasError('minlength') ? 'border-2 border-red-400' : ''">
 
-          <input [type]="isVisible? 'text' : 'password'" class="focus:outline-none grow py-2 bg-transparent text-sm border-none focus:ring-0 focus:border-none" placeholder="Password" formControlName="password">
+          <input [type]="isVisible? 'text' : 'password'" class="focus:outline-none grow py-2 bg-transparent text-sm border-none focus:ring-0 focus:border-none" placeholder="Kata Sandi" formControlName="password">
           <!-- <fa-icon [icon]="icon.faMail" class="basis-1/8 text-center"></fa-icon> -->
           <button type="button" (click)="isVisible = !isVisible"><i class="fa-solid" [ngClass]="isVisible ? 'fa-eye-slash' : 'fa-eye'"></i></button>
         </div>
-        <span class="text-red-500 text-xs ml-3" *ngIf="password?.hasError('required') && password?.touched">Password harus di isi!</span>
+        <span class="text-red-500 text-xs ml-3" *ngIf="password?.hasError('required') && password?.touched">Kata sandi harus di isi!</span>
         <span class="text-red-500 text-xs ml-3" *ngIf="password?.hasError('minlength')">Minimal 8 karakter!</span>
       </div>
 
-      <button class="rounded-lg p-1 text-white" [ngClass]="theme.config.color.bg_500">login</button>
+      <button class="rounded-lg p-1 text-white" [ngClass]="theme.config.color.bg_500">Masuk</button>
     </div>
   </form>
 </div>

@@ -46,7 +46,7 @@ export class DashboardComponent {
   public pieChartLegend = true;
   public pieChartPlugins = [];
   public pieChartOptions: ChartOptions<'pie'> = {responsive: true};
-  public pieChartLabels = ['User', 'Operator', 'Admin'];
+  public pieChartLabels = ['Pengguna', 'Operator', 'Admin'];
   public pieChartDatasets? : any;
 
   get currentPath(){
@@ -104,7 +104,7 @@ export class DashboardComponent {
       datasets: [
         {
           data: this.weeklyUser!,
-          label: 'User',
+          label: 'Pengguna',
           backgroundColor: isDark ? this.theme.config.color.chart_900 : this.theme.config.color.chart_200,
           borderColor: 'white'
         },

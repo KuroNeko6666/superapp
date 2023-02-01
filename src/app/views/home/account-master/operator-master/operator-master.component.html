@@ -1,7 +1,7 @@
 <div class="flex flex-col h-fit" *ngIf="!isLoading && !formMode">
   <div class="flex flex-col h-fit">
     <div class="flex flex-col p-3" [ngClass]="theme.config.mode.text">
-      <span class="text-2xl font-bold">Operator Management</span>
+      <span class="text-2xl font-bold">Manajemen Operator</span>
       <span class="text-sm font-light">{{ currentPath }}</span>
     </div>
     <div class="p-3 rounded-lg flex flex-col overflow-x-scroll md:overflow-clip gap-y-3"
@@ -21,7 +21,7 @@
         <thead [ngClass]="theme.data.mode == 'dark' ? theme.config.color.bg_700: theme.config.color.bg_300">
           <tr class="text-left">
             <th class="p-2">No</th>
-            <th class="p-2">Name</th>
+            <th class="p-2">Nama</th>
             <th class="p-2">Email</th>
             <th class="p-2 text-center">Aksi</th>
           </tr>
@@ -55,7 +55,7 @@
         </tbody>
       </table>
       <div class="flex flex-row items-center gap-2 justify-end">
-        <span class="text-sm">page {{ page + 1 }} of {{ paginateData?.length }}</span>
+        <span class="text-sm">halaman {{ page + 1 }} dari {{ paginateData?.length }}</span>
         <button class="px-5" (click)="page > 0 ? changePage(false) : null">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
@@ -89,22 +89,24 @@
         <div class="flex flex-col gap-y-1">
           <input type="text" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
             placeholder="Nama..." [ngClass]="errorName" formControlName="name">
-          <span class="text-xs text-red-500" *ngIf="name?.hasError('required') && name?.touched">Judul Harus di
+          <span class="text-xs text-red-500" *ngIf="name?.hasError('required') && name?.touched">Nama Harus di
             isi</span>
         </div>
 
         <div class="flex flex-col gap-y-1">
           <input type="text" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
             placeholder="Email..." [ngClass]="errorEmail" formControlName="email">
-          <span class="text-xs text-red-500" *ngIf="email?.hasError('required') && email?.touched">Judul Harus di
+          <span class="text-xs text-red-500" *ngIf="email?.hasError('required') && email?.touched">Email Harus di
             isi</span>
+            <span class="text-xs text-red-500" *ngIf="email?.hasError('email')">Email tidak valid</span>
         </div>
 
         <div class="flex flex-col gap-y-1" *ngIf="createMode">
           <input type="password" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
-            placeholder="Password..." [ngClass]="errorPassword" formControlName="password">
-          <span class="text-xs text-red-500" *ngIf="password?.hasError('required') && password?.touched">Judul Harus di
+            placeholder="Kata Sandi..." [ngClass]="errorPassword" formControlName="password">
+          <span class="text-xs text-red-500" *ngIf="password?.hasError('required') && password?.touched">Kata Sandi Harus di
             isi</span>
+            <span class="text-xs text-red-500" *ngIf="password?.hasError('minlength')">Minimal 8 karakter</span>
         </div>
 
         <div class="space-x-3 text-right">

@@ -8,14 +8,14 @@
           <div class="h-10 w-10 rounded-full bg-black"
             [ngClass]="theme.data.mode == 'dark' ? 'border-4 border-slate-500' : ''"></div>
         </button>
-        <span class="text-xs">Dark</span>
+        <span class="text-xs">Gelap</span>
       </div>
       <div class="flex-col flex items-center gap-y-2">
         <button class="rounded-full" (click)="change('light', theme.data.color!)">
           <div class="h-10 w-10 rounded-full bg-white"
             [ngClass]="theme.data.mode == 'light' ? 'border-4 border-slate-500' : ''"></div>
         </button>
-        <span class="text-xs">Light</span>
+        <span class="text-xs">Terang</span>
       </div>
     </div>
     <span class="text-md font-bold text-center mt-3">Tema</span>
@@ -25,21 +25,21 @@
           <div class="h-10 w-10 rounded-full bg-teal-500"
             [ngClass]="theme.data.color == 'teal' ? 'border-4 border-slate-500' : ''"></div>
         </button>
-        <span class="text-xs">Teal</span>
+        <span class="text-xs">Hijau</span>
       </div>
       <div class="flex-col flex items-center gap-y-2">
         <button class="rounded-full" (click)="change(theme.data.mode!, 'blue')">
           <div class="h-10 w-10 rounded-full bg-blue-500"
             [ngClass]="theme.data.color == 'blue' ? 'border-4 border-slate-500' : ''"></div>
         </button>
-        <span class="text-xs">Blue</span>
+        <span class="text-xs">Biru</span>
       </div>
       <div class="flex-col flex items-center gap-y-2">
         <button class="rounded-full" (click)="change(theme.data.mode!, 'orange')">
           <div class="h-10 w-10 rounded-full bg-orange-500"
             [ngClass]="theme.data.color == 'orange' ? 'border-4 border-slate-500' : ''"></div>
         </button>
-        <span class="text-xs">Orange</span>
+        <span class="text-xs">Jingga</span>
       </div>
     </div>
     <button class="rounded-lg text-xs p-2 mt-3" [ngClass]="theme.config.color.bg_500" (click)="openSetting()">
