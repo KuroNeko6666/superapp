@@ -97,11 +97,11 @@ export class ApiService {
   }
 
   updateActivity(data: ActivityInterface, id: number): Observable<ResponseModel>{
-    return this.http.put<ResponseModel>((this.url.activity.base + id), data, {headers: this.headers})
+    return this.http.put<ResponseModel>((this.url.activity.base+ `/u/` + id), data, {headers: this.headers})
   }
 
   deleteActivity(id: number): Observable<ResponseModel>{
-    return this.http.delete<ResponseModel>((this.url.activity.base + id), {headers: this.headers})
+    return this.http.delete<ResponseModel>((this.url.activity.base + '/d/' + id), {headers: this.headers})
   }
 
   // ===== NEWS SECTION ===== //
@@ -127,11 +127,11 @@ export class ApiService {
     formData.append('title', data.title)
     formData.append('content', data.content)
     formData.append('thumbnail', data.thumbnail == undefined ? null : data.thumbnail)
-    return this.http.put<ResponseModel>((this.url.news.base + id), formData, {headers: this.headers})
+    return this.http.put<ResponseModel>((this.url.news.base+ `/u/` +id), formData, {headers: this.headers})
   }
 
   deleteNews(id: number): Observable<ResponseModel>{
-    return this.http.delete<ResponseModel>((this.url.news.base + id), {headers: this.headers})
+    return this.http.delete<ResponseModel>((this.url.news.base + '/d/' + id), {headers: this.headers})
   }
 
 }
