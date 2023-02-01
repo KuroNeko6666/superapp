@@ -153,6 +153,11 @@ export class NewsMasterComponent {
           this.isLoadingForm = false
         },
       })
+    } else {
+      this.snackbar.open("Isi terlebih dahulu", "oke",{
+        duration: 5000,
+        panelClass: 'app-notification-error',
+      })
     }
 
   }
