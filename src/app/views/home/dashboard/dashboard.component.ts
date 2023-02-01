@@ -28,6 +28,8 @@ export class DashboardComponent {
 
   // CHART //
   public weeklyUser?: number[] = [0,0,0,0,0,0,0]
+  public weeklyAdmin?: number[] = [0,0,0,0,0,0,0]
+  public weeklyOperator?: number[] = [0,0,0,0,0,0,0]
 
   // DATE //
   date = this.getDate()
@@ -102,8 +104,20 @@ export class DashboardComponent {
       datasets: [
         {
           data: this.weeklyUser!.reverse(),
-          label: 'Series A',
+          label: 'User',
           backgroundColor: isDark ? this.theme.config.color.chart_900 : this.theme.config.color.chart_200,
+          borderColor: 'white'
+        },
+        {
+          data: this.weeklyAdmin!.reverse(),
+          label: 'Admin',
+          backgroundColor: isDark ? this.theme.config.color.chart_800 : this.theme.config.color.chart_300,
+          borderColor: 'white'
+        },
+        {
+          data: this.weeklyOperator!.reverse(),
+          label: 'Operator',
+          backgroundColor: isDark ? this.theme.config.color.chart_700 : this.theme.config.color.chart_400,
           borderColor: 'white'
         },
       ],
@@ -141,7 +155,15 @@ export class DashboardComponent {
       let datee = this.getLabelDataWeek()
       datee.forEach((e, i) => {
         if(valDate == e){
-          this.weeklyUser![i] += 1
+          if(val.role == "user"){
+            this.weeklyUser![i] += 1
+          }
+          if(val.role == "admin"){
+            this.weeklyAdmin![i] += 1
+          }
+          if(val.role == "operator"){
+            this.weeklyOperator![i] += 1
+          }
         }
       })
 
