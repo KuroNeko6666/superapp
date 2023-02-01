@@ -44,7 +44,7 @@ export class DashboardComponent {
   public pieChartLegend = true;
   public pieChartPlugins = [];
   public pieChartOptions: ChartOptions<'pie'> = {responsive: true};
-  public pieChartLabels = ['User', 'Admin', 'Operator'];
+  public pieChartLabels = ['User', 'Operator', 'Admin'];
   public pieChartDatasets? : any;
 
   get currentPath(){

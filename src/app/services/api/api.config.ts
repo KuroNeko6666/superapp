@@ -12,7 +12,7 @@ export const API_CONFIG = {
     all: `/api/activity/all`,
   },
   user : {
-    create: `/api/register`,
+    create: `/api/auth/register`,
     base: `/api/user/`,
     all: `/api/users`,
     user: `/api/users/r/3`,
