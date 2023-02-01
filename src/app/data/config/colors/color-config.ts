@@ -111,14 +111,14 @@ export class ColorConfig {
       text_700: "text-orange-700",
       text_800: "text-orange-800",
       text_900: "text-orange-900",
-      chart_900: 'rgb(30 58 138)',
-      chart_800: 'rgb(30 64 175)',
-      chart_700: 'rgb(29 78 216)',
-      chart_600: 'rgb(37 99 235)',
-      chart_500: 'rgb(59 130 246)',
-      chart_400: 'rgb(96 165 250)',
-      chart_300: 'rgb(147 197 253)',
-      chart_200: 'rgb(191 219 254)'
+      chart_900: 'rgb(124 45 18)',
+      chart_800: 'rgb(154 52 18)',
+      chart_700: 'rgb(194 65 12)',
+      chart_600: 'rgb(234 88 12)',
+      chart_500: 'rgb(249 115 22)',
+      chart_400: 'rgb(251 146 60)',
+      chart_300: 'rgb(253 186 116)',
+      chart_200: 'rgb(254 215 170)'
     },
 
   }
