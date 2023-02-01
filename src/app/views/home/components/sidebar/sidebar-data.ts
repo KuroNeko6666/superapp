@@ -14,7 +14,7 @@ export class MENU_DATA {
       collapse: true,
       children: [
         {
-          name: 'User',
+          name: 'Pengguna',
           path: '/home/account-master/user',
         },
         {
