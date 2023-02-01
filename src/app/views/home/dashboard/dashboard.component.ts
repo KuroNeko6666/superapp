@@ -100,22 +100,22 @@ export class DashboardComponent {
     let isDark = this.theme.data.mode == 'dark'
     this.barChartData = {
 
-      labels: this.getLabelDataWeek().reverse(),
+      labels: this.getLabelDataWeek(),
       datasets: [
         {
-          data: this.weeklyUser!.reverse(),
+          data: this.weeklyUser!,
           label: 'User',
           backgroundColor: isDark ? this.theme.config.color.chart_900 : this.theme.config.color.chart_200,
           borderColor: 'white'
         },
         {
-          data: this.weeklyAdmin!.reverse(),
+          data: this.weeklyAdmin!,
           label: 'Admin',
           backgroundColor: isDark ? this.theme.config.color.chart_800 : this.theme.config.color.chart_300,
           borderColor: 'white'
         },
         {
-          data: this.weeklyOperator!.reverse(),
+          data: this.weeklyOperator!,
           label: 'Operator',
           backgroundColor: isDark ? this.theme.config.color.chart_700 : this.theme.config.color.chart_400,
           borderColor: 'white'
@@ -198,7 +198,7 @@ export class DashboardComponent {
     let data = datee.split('T')[0]
       week.push(data)
     }
-    return week
+    return week.reverse()
   }
 
 }
