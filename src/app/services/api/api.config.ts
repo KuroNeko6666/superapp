@@ -15,8 +15,8 @@ export const API_CONFIG = {
     create: `/api/register`,
     base: `/api/user/`,
     all: `/api/users`,
-    user: `/api/user/get/role/1`,
-    operator: `/api/user/get/role/2`,
-    admin: `/api/user/get/role/3`,
+    user: `/api/user/r/3`,
+    operator: `/api/user/r/2`,
+    admin: `/api/user/r/1`,
   }
 }

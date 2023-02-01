@@ -34,7 +34,7 @@ export class UserMasterComponent {
   public rawData?: UserModel[]
   public paginateData?: any[]
   public data?: UserModel[]
-  public role: number = 1
+  public role: number = 2
   public currentId?: number
   public page : number = 0
   public chunkSize : number = 10
