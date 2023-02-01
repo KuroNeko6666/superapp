@@ -30,11 +30,11 @@ export class ThemeService {
       return result
     } else {
       localStorage.setItem('mode', 'light')
-      localStorage.setItem('color', 'orange')
+      localStorage.setItem('color', 'blue')
       let result = {
         data: {
           mode: 'light',
-          color: 'orange'
+          color: 'blue'
         },
         config: {
           mode: this.config.mode.dark,
