@@ -137,7 +137,7 @@ export class NewsMasterComponent {
       let data: NewsInterface = this.createInterface(title.value!, content.value!, this.image!)
       this.createSubs = this.apiService.createNews(data).subscribe({
         next: (res) => {
-          if (res.message == 'Succses') {
+          if (res.message == 'Success') {
             this.isLoadingForm = false
             this.resetForm()
             this.getData()
@@ -156,6 +156,18 @@ export class NewsMasterComponent {
     }
 
   }
+
+removeTags(str: string) {
+  if ((str===null) || (str===''))
+      return false;
+  else
+      str = str.toString();
+
+  // Regular expression to identify HTML tags in
+  // the input string. Replacing the identified
+  // HTML tag with a null string.
+  return str.replace( /(<([^>]+)>)/ig, '');
+}
 
   show(data: NewsModel): void {
     let title = this.form.get('title')
