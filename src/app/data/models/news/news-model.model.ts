@@ -3,6 +3,7 @@ export class NewsModel {
   public title?: string
   public content?: string
   public thumbnail?: string
+  public created_at?: string
 
   constructor(values: NewsModel){
     Object.assign(this, values)

@@ -2,6 +2,8 @@ import { Component, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { lastValueFrom, Subscription } from 'rxjs';
+import { ActivityModel } from 'src/app/data/models/activity/activity-model.model';
+import { NewsModel } from 'src/app/data/models/news/news-model.model';
 import { UserModel } from 'src/app/data/models/user/user-model.model';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ThemeService } from 'src/app/services/utils/theme/theme.service';
@@ -25,11 +27,16 @@ export class DashboardComponent {
   public users?: UserModel[]
   public admins? : UserModel[]
   public operators? : UserModel[]
+  public news? : NewsModel[]
+  public activity? : ActivityModel[]
 
   // CHART //
   public weeklyUser?: number[] = [0,0,0,0,0,0,0]
   public weeklyAdmin?: number[] = [0,0,0,0,0,0,0]
   public weeklyOperator?: number[] = [0,0,0,0,0,0,0]
+  public weeklyNews?: number[] = [0,0,0,0,0,0,0]
+  public weeklyActivity?: number[] = [0,0,0,0,0,0,0]
+  public latestUser?: UserModel[]
 
   // DATE //
   date = this.getDate()
@@ -40,8 +47,11 @@ export class DashboardComponent {
 
   public barChartLegend = true;
   public barChartPlugins = [];
-  public barChartData?: ChartConfiguration<'bar'>['data']
   public barChartOptions: ChartOptions = {responsive: true};
+
+  public weeklyUserData?: ChartConfiguration<'bar'>['data']
+  public weeklyNewsData?: ChartConfiguration<'bar'>['data']
+  public weeklyActivityData?: ChartConfiguration<'bar'>['data']
 
   public pieChartLegend = true;
   public pieChartPlugins = [];
@@ -65,13 +75,19 @@ export class DashboardComponent {
     this.themeEmitter = this.themeService.emitTheme
     .subscribe((_) => {
       this.theme = this.themeService.theme
-      this.setDataBar()
-      this.setDataPie()
+      this.setWeeklyAccount()
+      this.setWeeklyNews()
+      this.setWeeklyActivity()
+      this.setPieAccount()
+      this.setLatestUser()
     })
     this.getAllData()
     .then((_) => {
-      this.setDataBar()
-      this.setDataPie()
+      this.setWeeklyAccount()
+      this.setWeeklyNews()
+      this.setWeeklyActivity()
+      this.setPieAccount()
+      this.setLatestUser()
       this.isLoading = false
     })
    }
@@ -96,10 +112,9 @@ export class DashboardComponent {
   }
 
 
-  setDataBar(){
+  setWeeklyAccount(){
     let isDark = this.theme.data.mode == 'dark'
-    this.barChartData = {
-
+    this.weeklyUserData = {
       labels: this.getLabelDataWeek(),
       datasets: [
         {
@@ -122,6 +137,40 @@ export class DashboardComponent {
         },
       ],
     };
+  }
+
+  setWeeklyNews(){
+    let isDark = this.theme.data.mode == 'dark'
+    this.weeklyNewsData = {
+      labels: this.getLabelDataWeek(),
+      datasets: [
+        {
+          data: this.weeklyNews!,
+          label: 'berita',
+          backgroundColor: isDark ? this.theme.config.color.chart_900 : this.theme.config.color.chart_200,
+          borderColor: 'white'
+        },
+      ],
+    };
+  }
+
+  setWeeklyActivity(){
+    let isDark = this.theme.data.mode == 'dark'
+    this.weeklyActivityData = {
+      labels: this.getLabelDataWeek(),
+      datasets: [
+        {
+          data: this.weeklyActivity!,
+          label: 'aktivitas',
+          backgroundColor: isDark ? this.theme.config.color.chart_900 : this.theme.config.color.chart_200,
+          borderColor: 'white'
+        },
+      ],
+    };
+  }
+
+  setLatestUser(){
+    this.latestUser = this.accounts?.splice(0,10)
   }
 
   async getAllData(){
@@ -150,7 +199,21 @@ export class DashboardComponent {
       }
     })
 
-    this.accounts!.forEach((val: UserModel, i: number) => {
+    await lastValueFrom(this.api.getAllNews())
+    .then((res) => {
+      if(res.message == "Success"){
+        this.news = res.data as NewsModel[]
+      }
+    })
+
+    await lastValueFrom(this.api.getAllActivity())
+    .then((res) => {
+      if(res.message == "Success"){
+        this.activity = res.data as ActivityModel[]
+      }
+    })
+
+    this.accounts!.forEach((val: UserModel) => {
       let valDate = val.created_at!.split('T')[0]
       let datee = this.getLabelDataWeek()
       datee.forEach((e, i) => {
@@ -166,21 +229,30 @@ export class DashboardComponent {
           }
         }
       })
+    })
 
-      // if (valDate[0] == this.year.toString() && valDate[1] == this.month) {
-      //   for (let index = 0; index < 7; index++) {
-      //     if (valDate[2] == (this.date - index).toString()) {
-      //       this.weeklyUser![index] += 1
+    this.news!.forEach((val: NewsModel) => {
+      let valDate = val.created_at!.split('T')[0]
+      let datee = this.getLabelDataWeek()
+      datee.forEach((e, i) => {
+        if(valDate == e){
+          this.weeklyNews![i] += 1
+        }
+      })
+    })
 
-      //     } else {
-      //       this.weeklyUser![index] += 0
-      //     }
-      //   }
-      // }
+    this.activity!.forEach((val: ActivityModel) => {
+      let valDate = val.created_at!.split('T')[0]
+      let datee = this.getLabelDataWeek()
+      datee.forEach((e, i) => {
+        if(valDate == e){
+          this.weeklyActivity![i] += 1
+        }
+      })
     })
   }
 
-  setDataPie() {
+  setPieAccount() {
     let isDark = this.theme.data.mode == 'dark'
     let color = this.theme.config.color
     this.pieChartDatasets = [
