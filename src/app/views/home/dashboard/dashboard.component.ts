@@ -30,6 +30,7 @@ export class DashboardComponent {
   public weeklyUser?: number[] = [0,0,0,0,0,0,0]
   public weeklyAdmin?: number[] = [0,0,0,0,0,0,0]
   public weeklyOperator?: number[] = [0,0,0,0,0,0,0]
+  public latestAccount?: UserModel[]
 
   // DATE //
   date = this.getDate()
@@ -67,12 +68,16 @@ export class DashboardComponent {
       this.theme = this.themeService.theme
       this.setDataBar()
       this.setDataPie()
+      this.setLatestAccount()
     })
     this.getAllData()
     .then((_) => {
       this.setDataBar()
       this.setDataPie()
+      this.setLatestAccount()
       this.isLoading = false
+      console.log(this.latestAccount);
+
     })
    }
 
@@ -189,6 +194,10 @@ export class DashboardComponent {
         backgroundColor: isDark ? [color.chart_900, color.chart_800, color.chart_700] : [color.chart_200, color.chart_300, color.chart_400]
       }
     ]
+  }
+
+  setLatestAccount(){
+    this.latestAccount = this.accounts?.slice(0, 3)
   }
 
   getLabelDataWeek() {
