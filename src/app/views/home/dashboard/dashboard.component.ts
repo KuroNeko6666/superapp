@@ -38,6 +38,7 @@ export class DashboardComponent {
   public weeklyNews?: number[] = [0,0,0,0,0,0,0]
   public weeklyActivity?: number[] = [0,0,0,0,0,0,0]
   public latestUser?: KeycloakModel[]
+  public userLength?: number
 
   // DATE //
   date = this.getDate()
@@ -78,7 +79,6 @@ export class DashboardComponent {
       this.theme = this.themeService.theme
       this.setWeeklyAccount()
       this.setWeeklyNews()
-      this.setWeeklyActivity()
       this.setPieAccount()
       this.setLatestUser()
     })
@@ -86,10 +86,10 @@ export class DashboardComponent {
     .then((_) => {
       this.setWeeklyAccount()
       this.setWeeklyNews()
-      this.setWeeklyActivity()
       this.setPieAccount()
       this.setLatestUser()
       this.isLoading = false
+      console.log(this.users);
     })
    }
 
@@ -151,15 +151,6 @@ export class DashboardComponent {
           backgroundColor: isDark ? this.theme.config.color.chart_900 : this.theme.config.color.chart_200,
           borderColor: 'white'
         },
-      ],
-    };
-  }
-
-  setWeeklyActivity(){
-    let isDark = this.theme.data.mode == 'dark'
-    this.weeklyActivityData = {
-      labels: this.getLabelDataWeek(),
-      datasets: [
         {
           data: this.weeklyActivity!,
           label: 'aktivitas',
@@ -171,6 +162,7 @@ export class DashboardComponent {
   }
 
   setLatestUser(){
+    this.userLength = this.users?.length
     this.latestUser = this.users?.splice(0,10)
   }
 
@@ -219,9 +211,6 @@ export class DashboardComponent {
       let datee = this.getLabelDataWeek()
       datee.forEach((e, i) => {
         if(valDate == e){
-          if(val.role == "user"){
-            this.weeklyUser![i] += 1
-          }
           if(val.role == "admin"){
             this.weeklyAdmin![i] += 1
           }
@@ -231,6 +220,17 @@ export class DashboardComponent {
         }
       })
     })
+
+  this.users!.forEach((val: KeycloakModel) => {
+      let valDate = val.created_at!.split('T')[0]
+      let datee = this.getLabelDataWeek()
+      datee.forEach((e, i) => {
+        if(valDate == e){
+          this.weeklyUser![i] += 1
+        }
+      })
+    })
+
 
     this.news!.forEach((val: NewsModel) => {
       let valDate = val.created_at!.split('T')[0]
@@ -251,6 +251,7 @@ export class DashboardComponent {
         }
       })
     })
+
   }
 
   setPieAccount() {
