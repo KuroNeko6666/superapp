@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { lastValueFrom, Subscription } from 'rxjs';
 import { ActivityModel } from 'src/app/data/models/activity/activity-model.model';
+import { KeycloakModel } from 'src/app/data/models/keycloak/keycloak-model';
 import { NewsModel } from 'src/app/data/models/news/news-model.model';
 import { UserModel } from 'src/app/data/models/user/user-model.model';
 import { ApiService } from 'src/app/services/api/api.service';
@@ -24,7 +25,7 @@ export class DashboardComponent {
 
   // DATA //
   public accounts?: UserModel[]
-  public users?: UserModel[]
+  public users?: KeycloakModel[]
   public admins? : UserModel[]
   public operators? : UserModel[]
   public news? : NewsModel[]
@@ -36,7 +37,7 @@ export class DashboardComponent {
   public weeklyOperator?: number[] = [0,0,0,0,0,0,0]
   public weeklyNews?: number[] = [0,0,0,0,0,0,0]
   public weeklyActivity?: number[] = [0,0,0,0,0,0,0]
-  public latestUser?: UserModel[]
+  public latestUser?: KeycloakModel[]
 
   // DATE //
   date = this.getDate()
@@ -170,7 +171,7 @@ export class DashboardComponent {
   }
 
   setLatestUser(){
-    this.latestUser = this.accounts?.splice(0,10)
+    this.latestUser = this.users?.splice(0,10)
   }
 
   async getAllData(){
@@ -183,7 +184,7 @@ export class DashboardComponent {
     await lastValueFrom(this.api.getAllUser())
     .then((res) => {
       if(res.message == "Success"){
-        this.users = res.data as UserModel[]
+        this.users = res.data as KeycloakModel[]
       }
     })
     await lastValueFrom(this.api.getAllOperator())

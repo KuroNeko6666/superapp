@@ -22,7 +22,9 @@
           <tr class="text-left">
             <th class="p-2">No</th>
             <th class="p-2">Nama</th>
+            <th class="p-2">Username</th>
             <th class="p-2">Email</th>
+            <th class="p-2">Status</th>
              <th class="p-2 text-center w-36 max-h-20">Aksi</th>
           </tr>
         </thead>
@@ -32,11 +34,19 @@
               [ngClass]="i % 2 != 0 ? (theme.data.mode == 'dark' ? theme.config.color.bg_900: theme.config.color.bg_100) : '' ">
               <td class="p-2 w-10 max-h-20">{{ i + 1 }}</td>
               <td class="p-2">
-                <p class=" w-80 max-h-20 overflow-clip">{{ item.name }}</p>
+                <p class="max-h-20 overflow-clip">{{ item.firstname + ' '+ item.lastname }}</p>
+              </td>
+              <td class="p-2">
+                <p class="max-h-20 overflow-clip">{{ item.username }}</p>
               </td>
               <td class="p-2">
                 <p class="max-h-20 text-ellipsis overflow-clip">
                   {{ item.email }}
+                </p>
+              </td>
+              <td class="p-2">
+                <p class="max-h-20 text-ellipsis overflow-clip">
+                  {{ item.email_verify? 'aktif' : 'nonaktif' }}
                 </p>
               </td>
               <td class="p-2">
@@ -45,7 +55,7 @@
                     (click)="edit(item)">
                     <i class="fa-solid fa-pen"></i>
                   </button>
-                  <button class="inline-block bg-red-500 rounded-full p-2 w-10 h-10 text-sm text-slate-100" (click)="deleteItem(item.id!)">
+                  <button class="inline-block bg-red-500 rounded-full p-2 w-10 h-10 text-sm text-slate-100" (click)="deleteItem(item.user_id!)">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
@@ -88,8 +98,20 @@
 <!--  -->
         <div class="flex flex-col gap-y-1">
           <input type="text" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
-            placeholder="Nama..." [ngClass]="errorName" formControlName="name">
-          <span class="text-xs text-red-500" *ngIf="name?.hasError('required') && name?.touched">Nama Harus di
+            placeholder="Nama Depan..." [ngClass]="errorFirstName" formControlName="firstname">
+          <span class="text-xs text-red-500" *ngIf="firstname?.hasError('required') && firstname?.touched">Nama Depan Harus di
+            isi</span>
+        </div>
+        <div class="flex flex-col gap-y-1">
+          <input type="text" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
+            placeholder="Nama Belakang..." [ngClass]="errorLastName" formControlName="lastname">
+          <span class="text-xs text-red-500" *ngIf="lastname?.hasError('required') && lastname?.touched">Nama Belakang Harus di
+            isi</span>
+        </div>
+        <div class="flex flex-col gap-y-1">
+          <input type="text" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
+            placeholder="Username..." [ngClass]="errorUsername" formControlName="username">
+          <span class="text-xs text-red-500" *ngIf="username?.hasError('required') && username?.touched">Username Harus di
             isi</span>
         </div>
 

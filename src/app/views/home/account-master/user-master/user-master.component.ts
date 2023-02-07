@@ -4,9 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { KeycloakInterface } from 'src/app/data/interfaces/keycloak-interface';
+import { KeycloakUpdateInterface } from 'src/app/data/interfaces/keycloak-update-interface';
 import { RegisterInterface } from 'src/app/data/interfaces/register-interface';
 import { UserInterface } from 'src/app/data/interfaces/user-interface';
-import { UserModel } from 'src/app/data/models/user/user-model.model';
+import { KeycloakModel } from 'src/app/data/models/keycloak/keycloak-model';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ThemeService } from 'src/app/services/utils/theme/theme.service';
 import { DeleteComponent } from 'src/app/views/components/modals/delete/delete.component';
@@ -31,9 +33,9 @@ export class UserMasterComponent {
   public createMode?: boolean = true
 
   // DATA //
-  public rawData?: UserModel[]
+  public rawData?: KeycloakModel[]
   public paginateData?: any[]
-  public data?: UserModel[]
+  public data?: KeycloakModel[]
   public role: number = 3
   public currentId?: number
   public page : number = 0
@@ -43,13 +45,21 @@ export class UserMasterComponent {
 
   public searchForm = new FormControl('')
   public form = this.formBuilder.group({
-    'name': ['', Validators.required],
+    'username': ['', Validators.required],
+    'firstname': ['', Validators.required],
+    'lastname': ['', Validators.required],
     'email': ['', [Validators.required, Validators.email]],
     'password': ['',[ Validators.required, Validators.minLength(8)]],
   })
 
-  get name() {
-    return this.form.get('name')
+  get username() {
+    return this.form.get('username')
+  }
+  get firstname() {
+    return this.form.get('firstname')
+  }
+  get lastname() {
+    return this.form.get('lastname')
   }
   get email() {
     return this.form.get('email')
@@ -58,8 +68,24 @@ export class UserMasterComponent {
    return this.form.get('password')
  }
 
-  get errorName() {
-    return (this.name?.hasError('required') && this.name.touched && this.theme.data.mode == 'dark')
+ get errorFirstName() {
+  return (this.firstname?.hasError('required') && this.firstname.touched && this.theme.data.mode == 'dark')
+  ? 'border-2 border-red-500 bg-slate-500 placeholder:text-slate-200'
+  : this.theme.data.mode == 'dark'
+  ? 'bg-slate-500 placeholder:text-slate-200'
+  : 'bg-slate-200'
+}
+
+ get errorLastName() {
+  return (this.lastname?.hasError('required') && this.lastname.touched && this.theme.data.mode == 'dark')
+  ? 'border-2 border-red-500 bg-slate-500 placeholder:text-slate-200'
+  : this.theme.data.mode == 'dark'
+  ? 'bg-slate-500 placeholder:text-slate-200'
+  : 'bg-slate-200'
+}
+
+  get errorUsername() {
+    return (this.username?.hasError('required') && this.username.touched && this.theme.data.mode == 'dark')
     ? 'border-2 border-red-500 bg-slate-500 placeholder:text-slate-200'
     : this.theme.data.mode == 'dark'
     ? 'bg-slate-500 placeholder:text-slate-200'
@@ -121,7 +147,7 @@ export class UserMasterComponent {
     this.subcription = this.apiService.getAllUser().subscribe({
       next: (res) => {
         if (res.message == 'Success') {
-          this.rawData = res.data as UserModel[]
+          this.rawData = res.data as KeycloakModel[]
           this.paginateData = this.paginate(this.rawData)
           this.data = this.paginateData[this.page]
         }
@@ -137,17 +163,18 @@ export class UserMasterComponent {
   }
 
   create(): void {
-    let name = this.name
+    let username = this.username
+    let firstname = this.firstname
+    let lastname = this.lastname
     let email = this.email
     let password = this.password
 
-    if ( password?.valid && name?.valid && email?.valid) {
+    if ( password?.valid && username?.valid && firstname?.valid && lastname?.valid && email?.valid) {
       this.isLoadingForm = true
-      let data: RegisterInterface = this.createInterface(name.value!, email.value!, password.value!)
-      this.createSubs = this.apiService.createAccount(data).subscribe({
+      let data: KeycloakInterface = this.createInterface(username.value!, firstname.value!, lastname.value!, email.value!, password.value!)
+      this.createSubs = this.apiService.createUser(data).subscribe({
         next: (res) => {
           console.log(res);
-
           if (res.message == 'Success') {
             this.isLoadingForm = false
             this.resetForm()
@@ -172,22 +199,27 @@ export class UserMasterComponent {
 
   }
 
-  edit(data: UserModel): void {
-    this.currentId = data.id
-    this.name?.setValue(data.name!)
+  edit(data: KeycloakModel): void {
+    this.currentId = data.user_id
+    this.firstname?.setValue(data.firstname!)
+    this.lastname?.setValue(data.lastname!)
+    this.username?.setValue(data.username!)
     this.email?.setValue(data.email!)
     this.createMode = false
     this.openForm()
   }
 
   update(): void {
-    let name = this.name
+    let username = this.username
+    let firstname = this.firstname
+    let lastname = this.lastname
     let email = this.email
+    let password = this.password
 
-    if (name?.valid && email?.valid) {
+    if (username?.valid && firstname?.valid && lastname?.valid && email?.valid) {
       this.isLoadingForm = true
-      let data: UserInterface = this.updateInterface(name.value!, email.value!)
-      this.updateSubs = this.apiService.updateAccount(data, this.currentId!).subscribe({
+      let data: KeycloakUpdateInterface = this.updateInterface(username.value!, firstname.value!, lastname.value!, email.value!)
+      this.updateSubs = this.apiService.updateUser(data, this.currentId!).subscribe({
         next: (res) => {
           console.log(res);
 
@@ -215,7 +247,7 @@ export class UserMasterComponent {
   deleteItem(id: number): void {
     this.dialog.open(DeleteComponent, {data:  this.theme.config.mode.bg}).afterClosed().subscribe((res) =>{
       if(res){
-       this.deleteSubs = this.apiService.deleteAccount(id)
+       this.deleteSubs = this.apiService.deleteUser(id)
        .subscribe({
         next: (res) => {
           if (res.message == 'Success') {
@@ -248,21 +280,23 @@ export class UserMasterComponent {
     return this.router.url
   }
 
-  createInterface(name: string, email:string, password: string) : RegisterInterface{
-    let res : RegisterInterface = {
-      name: name,
+  createInterface(username: string, firstname: string, lastname: string, email:string, password: string) : KeycloakInterface{
+    let res : KeycloakInterface = {
+      username: username,
+      lastname: firstname,
+      fisrtname: lastname,
       email: email,
       password: password,
-      role: this.role
     }
     return res
   }
 
-  updateInterface(name: string, email:string) : UserInterface{
-    let res : UserInterface = {
-      name: name,
+  updateInterface(username: string, firstname: string, lastname: string, email:string) : KeycloakUpdateInterface{
+    let res : KeycloakUpdateInterface = {
+      username: username,
+      lastname: firstname,
+      fisrtname: lastname,
       email: email,
-      role: this.role
     }
     return res
   }
@@ -295,7 +329,7 @@ export class UserMasterComponent {
   }
 
   search(text: string) {
-    let data = this.rawData?.filter((val) => val.name?.includes(text!) || val.email?.includes(text!))
+    let data = this.rawData?.filter((val) => val.username?.includes(text!) || val.firstname?.includes(text!) || val.lastname?.includes(text!) || val.email?.includes(text!))
     this.page = 0
     this.paginateData = this.paginate(data!)
     this.data = this.paginateData[this.page]
