@@ -218,7 +218,7 @@ export class UserMasterComponent {
 
     if (username?.valid && firstname?.valid && lastname?.valid && email?.valid) {
       this.isLoadingForm = true
-      let data: KeycloakUpdateInterface = this.updateInterface(username.value!, firstname.value!, lastname.value!, email.value!)
+      let data: KeycloakUpdateInterface = this.updateInterface(firstname.value!, lastname.value!)
       this.updateSubs = this.apiService.updateUser(data, this.currentId!).subscribe({
         next: (res) => {
           console.log(res);
@@ -291,12 +291,10 @@ export class UserMasterComponent {
     return res
   }
 
-  updateInterface(username: string, firstname: string, lastname: string, email:string) : KeycloakUpdateInterface{
+  updateInterface(firstname: string, lastname: string) : KeycloakUpdateInterface{
     let res : KeycloakUpdateInterface = {
-      username: username,
       lastname: firstname,
       fisrtname: lastname,
-      email: email,
     }
     return res
   }

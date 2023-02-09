@@ -147,7 +147,7 @@ export class ApiService {
   }
 
   updateUser(data: KeycloakUpdateInterface, id: number): Observable<ResponseModel>{
-    return this.http.put<ResponseModel>((this.url.keycloak.all + `/u/` + id), data, {headers: this.headers})
+    return this.http.put<ResponseModel>((this.url.keycloak.update + id), data, {headers: this.headers})
   }
 
   deleteUser(id: number): Observable<ResponseModel>{

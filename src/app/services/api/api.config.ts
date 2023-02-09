@@ -25,5 +25,6 @@ export const API_CONFIG = {
     all: `/api/users/m/all`,
     delete: `/api/users/m/d/`,
     find: `/api/users/m/i/`,
+    update: `/api/users/m/u/`,
   },
 }
