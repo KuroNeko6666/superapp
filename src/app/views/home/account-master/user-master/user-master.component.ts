@@ -285,8 +285,8 @@ export class UserMasterComponent {
   createInterface(username: string, firstname: string, lastname: string, email:string, password: string) : KeycloakInterface{
     let res : KeycloakInterface = {
       username: username,
-      lastname: firstname,
-      firstname: lastname,
+      lastname: lastname,
+      firstname: firstname,
       email: email,
       password: password,
     }
@@ -295,8 +295,8 @@ export class UserMasterComponent {
 
   updateInterface(firstname: string, lastname: string) : KeycloakUpdateInterface{
     let res : KeycloakUpdateInterface = {
-      lastname: firstname,
-      firstname: lastname,
+      lastname: lastname,
+      firstname: firstname,
     }
     return res
   }
