@@ -1,4 +1,4 @@
 export interface KeycloakUpdateInterface {
-  fisrtname: string,
+  firstname: string,
   lastname: string,
 }

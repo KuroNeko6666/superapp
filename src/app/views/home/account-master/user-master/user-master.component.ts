@@ -293,7 +293,7 @@ export class UserMasterComponent {
   updateInterface(firstname: string, lastname: string) : KeycloakUpdateInterface{
     let res : KeycloakUpdateInterface = {
       lastname: firstname,
-      fisrtname: lastname,
+      firstname: lastname,
     }
     return res
   }
