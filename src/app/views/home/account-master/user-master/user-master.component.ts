@@ -172,6 +172,9 @@ export class UserMasterComponent {
     if ( password?.valid && username?.valid && firstname?.valid && lastname?.valid && email?.valid) {
       this.isLoadingForm = true
       let data: KeycloakInterface = this.createInterface(username.value!, firstname.value!, lastname.value!, email.value!, password.value!)
+      console.log(data
+        );
+
       this.createSubs = this.apiService.createUser(data).subscribe({
         next: (res) => {
           console.log(res);
@@ -283,7 +286,7 @@ export class UserMasterComponent {
     let res : KeycloakInterface = {
       username: username,
       lastname: firstname,
-      fisrtname: lastname,
+      firstname: lastname,
       email: email,
       password: password,
     }
