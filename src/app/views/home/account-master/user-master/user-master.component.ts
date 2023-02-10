@@ -214,7 +214,6 @@ export class UserMasterComponent {
     let firstname = this.firstname
     let lastname = this.lastname
     let email = this.email
-    let password = this.password
 
     if (username?.valid && firstname?.valid && lastname?.valid && email?.valid) {
       this.isLoadingForm = true

@@ -77,19 +77,18 @@ export class DashboardComponent {
     this.themeEmitter = this.themeService.emitTheme
     .subscribe((_) => {
       this.theme = this.themeService.theme
+      this.setLatestUser()
       this.setWeeklyAccount()
       this.setWeeklyNews()
       this.setPieAccount()
-      this.setLatestUser()
     })
     this.getAllData()
     .then((_) => {
+      this.setLatestUser()
       this.setWeeklyAccount()
       this.setWeeklyNews()
       this.setPieAccount()
-      this.setLatestUser()
       this.isLoading = false
-      console.log(this.users);
     })
    }
 
@@ -221,6 +220,7 @@ export class DashboardComponent {
       })
     })
 
+
   this.users!.forEach((val: KeycloakModel) => {
       let valDate = val.created_at!.split('T')[0]
       let datee = this.getLabelDataWeek()
@@ -254,12 +254,22 @@ export class DashboardComponent {
 
   }
 
-  setPieAccount() {
+ async setPieAccount() {
     let isDark = this.theme.data.mode == 'dark'
     let color = this.theme.config.color
+    let length = 0
+    await lastValueFrom(this.api.getAllUser())
+    .then((res) => {
+      if(res.message == "Success"){
+       let  data = res.data as KeycloakModel[]
+        length = data.length
+      }
+    })
+    console.log(length);
+
     this.pieChartDatasets = [
       {
-        data: [this.users!.length, this.operators!.length, this.admins!.length],
+        data: [length, this.operators!.length, this.admins!.length],
         backgroundColor: isDark ? [color.chart_900, color.chart_800, color.chart_700] : [color.chart_200, color.chart_300, color.chart_400]
       }
     ]
