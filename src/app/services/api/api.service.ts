@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ActivityInterface } from 'src/app/data/interfaces/activity-interface';
+import { KeycloakInterface } from 'src/app/data/interfaces/keycloak-interface';
+import { KeycloakUpdateInterface } from 'src/app/data/interfaces/keycloak-update-interface';
 import { LoginInterface } from 'src/app/data/interfaces/login-interface';
 import { NewsInterface } from 'src/app/data/interfaces/news-interface';
 import { RegisterInterface } from 'src/app/data/interfaces/register-interface';
@@ -52,10 +54,6 @@ export class ApiService {
 
   getAllAccount() : Observable<ResponseModel>{
     return this.http.get<ResponseModel>(this.url.user.all, {headers: this.headers})
-  }
-
-  getAllUser() : Observable<ResponseModel>{
-    return this.http.get<ResponseModel>(this.url.user.user, {headers: this.headers})
   }
 
   getAllOperator() : Observable<ResponseModel>{
@@ -132,6 +130,28 @@ export class ApiService {
 
   deleteNews(id: number): Observable<ResponseModel>{
     return this.http.delete<ResponseModel>((this.url.news.base + '/d/' + id), {headers: this.headers})
+  }
+
+  // === CREATE KEYCLOAK === //
+
+  getAllUser() : Observable<ResponseModel>{
+    return this.http.get<ResponseModel>(this.url.keycloak.all, {headers: this.headers})
+  }
+
+  findUser(id: number): Observable<ResponseModel>{
+    return this.http.get<ResponseModel>((this.url.keycloak.find + id), {headers: this.headers})
+  }
+
+  createUser(data: KeycloakInterface): Observable<ResponseModel>{
+    return this.http.post<ResponseModel>(this.url.keycloak.create, data, {headers: this.headers})
+  }
+
+  updateUser(data: KeycloakUpdateInterface, id: number): Observable<ResponseModel>{
+    return this.http.put<ResponseModel>((this.url.keycloak.update + id), data, {headers: this.headers})
+  }
+
+  deleteUser(id: number): Observable<ResponseModel>{
+    return this.http.delete<ResponseModel>((this.url.keycloak.delete + id), {headers: this.headers})
   }
 
 }

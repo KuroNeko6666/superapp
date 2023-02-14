@@ -18,5 +18,13 @@ export const API_CONFIG = {
     user: `/api/users/r/3`,
     operator: `/api/users/r/2`,
     admin: `/api/users/r/1`,
-  }
+  },
+
+  keycloak: {
+    create: `/api/auth/user/register`,
+    all: `/api/users/m/all`,
+    delete: `/api/users/m/d/`,
+    find: `/api/users/m/i/`,
+    update: `/api/users/m/u/`,
+  },
 }

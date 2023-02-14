@@ -2,6 +2,9 @@ import { Component, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { lastValueFrom, Subscription } from 'rxjs';
+import { ActivityModel } from 'src/app/data/models/activity/activity-model.model';
+import { KeycloakModel } from 'src/app/data/models/keycloak/keycloak-model';
+import { NewsModel } from 'src/app/data/models/news/news-model.model';
 import { UserModel } from 'src/app/data/models/user/user-model.model';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ThemeService } from 'src/app/services/utils/theme/theme.service';
@@ -22,14 +25,20 @@ export class DashboardComponent {
 
   // DATA //
   public accounts?: UserModel[]
-  public users?: UserModel[]
+  public users?: KeycloakModel[]
   public admins? : UserModel[]
   public operators? : UserModel[]
+  public news? : NewsModel[]
+  public activity? : ActivityModel[]
 
   // CHART //
   public weeklyUser?: number[] = [0,0,0,0,0,0,0]
   public weeklyAdmin?: number[] = [0,0,0,0,0,0,0]
   public weeklyOperator?: number[] = [0,0,0,0,0,0,0]
+  public weeklyNews?: number[] = [0,0,0,0,0,0,0]
+  public weeklyActivity?: number[] = [0,0,0,0,0,0,0]
+  public latestUser?: KeycloakModel[]
+  public userLength?: number
 
   // DATE //
   date = this.getDate()
@@ -40,8 +49,11 @@ export class DashboardComponent {
 
   public barChartLegend = true;
   public barChartPlugins = [];
-  public barChartData?: ChartConfiguration<'bar'>['data']
   public barChartOptions: ChartOptions = {responsive: true};
+
+  public weeklyUserData?: ChartConfiguration<'bar'>['data']
+  public weeklyNewsData?: ChartConfiguration<'bar'>['data']
+  public weeklyActivityData?: ChartConfiguration<'bar'>['data']
 
   public pieChartLegend = true;
   public pieChartPlugins = [];
@@ -65,13 +77,17 @@ export class DashboardComponent {
     this.themeEmitter = this.themeService.emitTheme
     .subscribe((_) => {
       this.theme = this.themeService.theme
-      this.setDataBar()
-      this.setDataPie()
+      this.setLatestUser()
+      this.setWeeklyAccount()
+      this.setWeeklyNews()
+      this.setPieAccount()
     })
     this.getAllData()
     .then((_) => {
-      this.setDataBar()
-      this.setDataPie()
+      this.setLatestUser()
+      this.setWeeklyAccount()
+      this.setWeeklyNews()
+      this.setPieAccount()
       this.isLoading = false
     })
    }
@@ -96,10 +112,9 @@ export class DashboardComponent {
   }
 
 
-  setDataBar(){
+  setWeeklyAccount(){
     let isDark = this.theme.data.mode == 'dark'
-    this.barChartData = {
-
+    this.weeklyUserData = {
       labels: this.getLabelDataWeek(),
       datasets: [
         {
@@ -124,6 +139,32 @@ export class DashboardComponent {
     };
   }
 
+  setWeeklyNews(){
+    let isDark = this.theme.data.mode == 'dark'
+    this.weeklyNewsData = {
+      labels: this.getLabelDataWeek(),
+      datasets: [
+        {
+          data: this.weeklyNews!,
+          label: 'berita',
+          backgroundColor: isDark ? this.theme.config.color.chart_900 : this.theme.config.color.chart_200,
+          borderColor: 'white'
+        },
+        {
+          data: this.weeklyActivity!,
+          label: 'aktivitas',
+          backgroundColor: isDark ? this.theme.config.color.chart_900 : this.theme.config.color.chart_200,
+          borderColor: 'white'
+        },
+      ],
+    };
+  }
+
+  setLatestUser(){
+    this.userLength = this.users?.length
+    this.latestUser = this.users?.splice(0,10)
+  }
+
   async getAllData(){
     await lastValueFrom(this.api.getAllAccount())
     .then((res) => {
@@ -134,7 +175,7 @@ export class DashboardComponent {
     await lastValueFrom(this.api.getAllUser())
     .then((res) => {
       if(res.message == "Success"){
-        this.users = res.data as UserModel[]
+        this.users = res.data as KeycloakModel[]
       }
     })
     await lastValueFrom(this.api.getAllOperator())
@@ -150,14 +191,25 @@ export class DashboardComponent {
       }
     })
 
-    this.accounts!.forEach((val: UserModel, i: number) => {
+    await lastValueFrom(this.api.getAllNews())
+    .then((res) => {
+      if(res.message == "Success"){
+        this.news = res.data as NewsModel[]
+      }
+    })
+
+    await lastValueFrom(this.api.getAllActivity())
+    .then((res) => {
+      if(res.message == "Success"){
+        this.activity = res.data as ActivityModel[]
+      }
+    })
+
+    this.accounts!.forEach((val: UserModel) => {
       let valDate = val.created_at!.split('T')[0]
       let datee = this.getLabelDataWeek()
       datee.forEach((e, i) => {
         if(valDate == e){
-          if(val.role == "user"){
-            this.weeklyUser![i] += 1
-          }
           if(val.role == "admin"){
             this.weeklyAdmin![i] += 1
           }
@@ -166,26 +218,58 @@ export class DashboardComponent {
           }
         }
       })
-
-      // if (valDate[0] == this.year.toString() && valDate[1] == this.month) {
-      //   for (let index = 0; index < 7; index++) {
-      //     if (valDate[2] == (this.date - index).toString()) {
-      //       this.weeklyUser![index] += 1
-
-      //     } else {
-      //       this.weeklyUser![index] += 0
-      //     }
-      //   }
-      // }
     })
+
+
+  this.users!.forEach((val: KeycloakModel) => {
+      let valDate = val.created_at!.split('T')[0]
+      let datee = this.getLabelDataWeek()
+      datee.forEach((e, i) => {
+        if(valDate == e){
+          this.weeklyUser![i] += 1
+        }
+      })
+    })
+
+
+    this.news!.forEach((val: NewsModel) => {
+      let valDate = val.created_at!.split('T')[0]
+      let datee = this.getLabelDataWeek()
+      datee.forEach((e, i) => {
+        if(valDate == e){
+          this.weeklyNews![i] += 1
+        }
+      })
+    })
+
+    this.activity!.forEach((val: ActivityModel) => {
+      let valDate = val.created_at!.split('T')[0]
+      let datee = this.getLabelDataWeek()
+      datee.forEach((e, i) => {
+        if(valDate == e){
+          this.weeklyActivity![i] += 1
+        }
+      })
+    })
+
   }
 
-  setDataPie() {
+ async setPieAccount() {
     let isDark = this.theme.data.mode == 'dark'
     let color = this.theme.config.color
+    let length = 0
+    await lastValueFrom(this.api.getAllUser())
+    .then((res) => {
+      if(res.message == "Success"){
+       let  data = res.data as KeycloakModel[]
+        length = data.length
+      }
+    })
+    console.log(length);
+
     this.pieChartDatasets = [
       {
-        data: [this.users!.length, this.operators!.length, this.admins!.length],
+        data: [length, this.operators!.length, this.admins!.length],
         backgroundColor: isDark ? [color.chart_900, color.chart_800, color.chart_700] : [color.chart_200, color.chart_300, color.chart_400]
       }
     ]

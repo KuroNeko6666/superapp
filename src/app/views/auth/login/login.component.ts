@@ -81,6 +81,7 @@ public isVisible? = false
             this.router.navigateByUrl('home/dashboard')
           }
         } else {
+          console.log(res);
           this.snackbar.open('Email atau Kata Sandi salah', 'oke', {
             duration: 3000,
             panelClass: 'app-notification-error',
