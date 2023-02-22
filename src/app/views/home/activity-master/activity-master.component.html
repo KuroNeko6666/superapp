@@ -34,7 +34,7 @@
               [ngClass]="i % 2 != 0 ? (theme.data.mode == 'dark' ? theme.config.color.bg_900: theme.config.color.bg_100) : '' ">
               <td class="p-2 w-10 max-h-20">{{ i + 1 }}</td>
               <td class="p-2">
-                <p class=" w-80 max-h-20 overflow-clip">{{ item.name }}</p>
+                <p class=" w-80 max-h-20 overflow-clip">{{ item.activity_name }}</p>
               </td>
               <td class="p-2">
                 <p class="max-h-20 text-ellipsis overflow-clip">
@@ -92,8 +92,8 @@
         <!--  -->
         <div class="flex flex-col gap-y-1">
           <input type="text" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
-            placeholder="Nama..." [ngClass]="errorName" formControlName="name">
-          <span class="text-xs text-red-500" *ngIf="name?.hasError('required') && name?.touched">Nama Harus di
+            placeholder="Nama..." [ngClass]="errorName" formControlName="activity_name">
+          <span class="text-xs text-red-500" *ngIf="activity_name?.hasError('required') && activity_name?.touched">Nama aktivitas Harus di
             isi</span>
         </div>
 
@@ -108,11 +108,40 @@
         <label for="time">
           <div class="flex flex-col gap-y-1">
             <input type="datetime-local" [class]="'rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-none'"
-              placeholder="Tanggal..." [ngClass]="errorTime" formControlName="time" [value]="time?.value" id="time">
+              placeholder="Tanggal..." [ngClass]="errorTime" formControlName="time" [value]="time!.value!" id="time">
             <span class="text-xs text-red-500" *ngIf="time?.hasError('required') && time?.touched">Tanggal Harus di
               isi</span>
           </div>
         </label>
+
+        <label for="file" class="rounded-lg px-3 py-2 text-sm w-fit"
+          [ngClass]="theme.data.mode == 'dark' ? 'bg-slate-500' : 'bg-slate-200'">
+          <span>Pilih Beberapa File</span>
+          <input id="file" class="hidden" type="file" (change)="onFileSelect($event.target)" [multiple]="true">
+        </label>
+
+        <div
+          class="flex flex-col items-center justify-center w-full min-h-96 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-500">
+          <div class="flex flex-col items-center justify-center">
+            <p class="text-sm text-gray-500 dark:text-gray-400 my-10" *ngIf="imagePath?.length == 0">
+              <span class="font-semibold">
+                Preview
+              </span>
+            </p>
+            <!-- <ng-container *ngFor="let item of imagePath">
+              <img [src]="item" alt="">
+              <button (click)="deleteImage()">delete</button>
+            </ng-container> -->
+            <div class="space-y-2">
+              <ng-container *ngFor="let item of imageData; let i=index">
+                <div class="flex flex-col gap-1 m-2">
+                  <img [src]="item.image_url" alt="" class="rounded-lg">
+                  <button class="inline-block bg-red-500 rounded-lg p-2 text-sm text-slate-100" type="button" (click)="item.id != undefined ? deleteImage(item.activity_id!, item.id!, i) : deleteImage(null, null, i)">Hapus Gambar</button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
 
         <div class="space-x-3 text-right">
           <button class="inline-block bg-red-500 rounded-lg p-2 text-sm text-slate-100" (click)="closeForm()">

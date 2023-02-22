@@ -51,6 +51,7 @@ export class NewsMasterComponent {
   public form = this.formBuilder.group({
     'title': ['', Validators.required],
     'content': ['', Validators.required],
+    'source': ['', Validators.required],
   })
 
   get title() {
@@ -60,7 +61,19 @@ export class NewsMasterComponent {
     return this.form.get('content')
   }
 
+  get source() {
+    return this.form.get('source')
+  }
+
   get errorTitle() {
+    return (this.title?.hasError('required') && this.title.touched && this.theme.data.mode == 'dark')
+    ? 'border-2 border-red-500 bg-slate-500 placeholder:text-slate-200'
+    : this.theme.data.mode == 'dark'
+    ? 'bg-slate-500 placeholder:text-slate-200'
+    : 'bg-slate-200'
+  }
+
+  get errorSource() {
     return (this.title?.hasError('required') && this.title.touched && this.theme.data.mode == 'dark')
     ? 'border-2 border-red-500 bg-slate-500 placeholder:text-slate-200'
     : this.theme.data.mode == 'dark'
@@ -130,11 +143,12 @@ export class NewsMasterComponent {
   create(): void {
     let title = this.form.get('title')
     let content = this.form.get('content')
+    let source = this.form.get('source')
     console.log('oke');
 
-    if (this.image != undefined && title?.valid && content?.valid) {
+    if (this.image != undefined && title?.valid && content?.valid && source?.valid) {
       this.isLoadingForm = true
-      let data: NewsInterface = this.createInterface(title.value!, content.value!, this.image!)
+      let data: NewsInterface = this.createInterface(title.value!, content.value!, source?.value!, this.image!)
       this.createSubs = this.apiService.createNews(data).subscribe({
         next: (res) => {
           if (res.message == 'Success') {
@@ -168,9 +182,6 @@ removeTags(str: string) {
   else
       str = str.toString();
 
-  // Regular expression to identify HTML tags in
-  // the input string. Replacing the identified
-  // HTML tag with a null string.
   return str.replace( /(<([^>]+)>)/ig, '');
 }
 
@@ -180,6 +191,7 @@ removeTags(str: string) {
     this.currentId = data.id
     title?.setValue(data.title!)
     content?.setValue(data.content!)
+    this.source?.setValue(data.source!)
     this.imagePath = data.thumbnail!
     this.createMode = false
     this.openForm()
@@ -188,10 +200,11 @@ removeTags(str: string) {
   update(): void {
     let title = this.form.get('title')
     let content = this.form.get('content')
+    let source = this.source
 
-    if (title?.valid && content?.valid) {
+    if (title?.valid && content?.valid && source?.valid) {
       this.isLoadingForm = true
-      let data: NewsInterface = this.createInterface(title.value!, content.value!, this.image)
+      let data: NewsInterface = this.createInterface(title.value!, content.value!, this.source?.value!, this.image)
       this.updateSubs = this.apiService.updateNews(data, this.currentId!).subscribe({
         next: (res) => {
           console.log(res);
@@ -271,11 +284,12 @@ removeTags(str: string) {
     })
   }
 
-  createInterface(title: string, content:string, thumbnail?: Blob) : NewsInterface{
+  createInterface(title: string, content:string, source:string, thumbnail?: Blob) : NewsInterface{
     let res : NewsInterface = {
       title: title,
       content: content,
-      thumbnail: thumbnail
+      thumbnail: thumbnail,
+      source: source
     }
     return res
   }

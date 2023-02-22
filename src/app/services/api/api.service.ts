@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -91,15 +91,42 @@ export class ApiService {
   }
 
   createActivity(data: ActivityInterface): Observable<ResponseModel>{
-    return this.http.post<ResponseModel>(this.url.activity.create, data, {headers: this.headers})
+    let formData = new FormData()
+    formData.append('activity_name', data.activity_name)
+    formData.append('place', data.place)
+    formData.append('time', data.time)
+    for (const iterator of data.images) {
+      console.log(iterator);
+      formData.append('images', iterator)
+    }
+    return this.http.post<ResponseModel>(this.url.activity.create, formData, {headers: this.headers})
   }
 
   updateActivity(data: ActivityInterface, id: number): Observable<ResponseModel>{
-    return this.http.put<ResponseModel>((this.url.activity.base+ `/u/` + id), data, {headers: this.headers})
+    let formData = new FormData()
+    formData.append('activity_name', data.activity_name)
+    formData.append('place', data.place)
+    formData.append('time', data.time)
+    if(data.images.length != 0){
+      for (const iterator of data.images) {
+        formData.append('images', iterator)
+      }
+    }
+    console.log({
+      activity_name: formData.get('activity_name'),
+      place: formData.get('place'),
+      time: formData.get('time'),
+      image: formData.getAll('images'),
+    });
+    return this.http.put<ResponseModel>(this.url.activity.update + id, formData, {headers: this.headers})
   }
 
   deleteActivity(id: number): Observable<ResponseModel>{
-    return this.http.delete<ResponseModel>((this.url.activity.base + '/d/' + id), {headers: this.headers})
+    return this.http.delete<ResponseModel>((this.url.activity.base + 'd/' + id), {headers: this.headers})
+  }
+
+  deleteImageActivity(id: number, id_img: number): Observable<ResponseModel>{
+    return this.http.delete<ResponseModel>(this.url.activity.delete_img + `/` + id + `/` + id_img, {headers: this.headers})
   }
 
   // ===== NEWS SECTION ===== //
@@ -117,6 +144,9 @@ export class ApiService {
     formData.append('title', data.title)
     formData.append('content', data.content)
     formData.append('thumbnail', data.thumbnail)
+    formData.append('source', data.source)
+    console.log(data);
+
     return this.http.post<ResponseModel>(this.url.news.create, formData, {headers: this.headers})
   }
 
@@ -125,6 +155,7 @@ export class ApiService {
     formData.append('title', data.title)
     formData.append('content', data.content)
     formData.append('thumbnail', data.thumbnail == undefined ? null : data.thumbnail)
+    formData.append('source', data.source)
     return this.http.put<ResponseModel>((this.url.news.base+ `/u/` +id), formData, {headers: this.headers})
   }
 

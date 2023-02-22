@@ -7,7 +7,10 @@ export const API_CONFIG = {
     all: `/api/news/all`,
   },
   activity: {
+    image: `/api/act/post`,
+    delete_img: `/api/activity/img/d/one`,
     create: `/api/activity`,
+    update: `api/activity/u/`,
     base: `/api/activity/`,
     all: `/api/activity/all`,
   },

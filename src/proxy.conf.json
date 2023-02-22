@@ -1,6 +1,8 @@
 {
+
   "/api": {
     "target": "http://188.166.245.130:1323",
-    "secure": false
+    "secure": false,
+    "timeout": 10000
   }
 }
