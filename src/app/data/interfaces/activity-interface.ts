@@ -1,5 +1,6 @@
 export interface ActivityInterface {
-  name: string,
+  activity_name: string,
   place: string,
-  time: string
+  time: string,
+  images: any
 }
