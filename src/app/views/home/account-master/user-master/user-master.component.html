@@ -127,6 +127,24 @@
             <span class="text-xs text-red-500" *ngIf="password?.hasError('minlength')">Minimal 8 karakter</span>
         </div>
 
+        <label for="file" class="rounded-lg px-3 py-2 text-sm w-fit"
+          [ngClass]="theme.data.mode == 'dark' ? 'bg-slate-500' : 'bg-slate-200'">
+          <span>Ubah Avatar</span>
+          <input id="file" class="hidden" type="file" (change)="onFileSelect($event.target)">
+        </label>
+
+        <div
+          class="flex flex-col items-center justify-center w-full min-h-96 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-500" *ngIf="!createMode">
+          <div class="flex flex-col items-center justify-center">
+            <p class="text-sm text-gray-500 dark:text-gray-400 my-10" *ngIf="!imagePath">
+              <span class="font-semibold">
+                Preview
+              </span>
+            </p>
+            <img [src]="imagePath" alt="" *ngIf="imagePath" class="mt-2">
+          </div>
+        </div>
+
         <div class="space-x-3 text-right">
           <button class="inline-block bg-red-500 rounded-lg p-2 text-sm text-slate-100" (click)="closeForm()">
             Batal

@@ -185,4 +185,10 @@ export class ApiService {
     return this.http.delete<ResponseModel>((this.url.keycloak.delete + id), {headers: this.headers})
   }
 
+  updateAvatarUser(data: Blob, id:number): Observable<ResponseModel>{
+    let formData = new FormData()
+    formData.append('avatar', data)
+    return this.http.put<ResponseModel>((this.url.user.avatar + id), formData, {headers: this.headers})
+  }
+
 }
