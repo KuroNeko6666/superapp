@@ -21,6 +21,7 @@ export const API_CONFIG = {
     user: `/api/users/r/3`,
     operator: `/api/users/r/2`,
     admin: `/api/users/r/1`,
+    avatar: `/api/users/m/change/ava/`
   },
 
   keycloak: {

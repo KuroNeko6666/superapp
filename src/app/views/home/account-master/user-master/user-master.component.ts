@@ -40,6 +40,8 @@ export class UserMasterComponent {
   public currentId?: number
   public page : number = 0
   public chunkSize : number = 10
+  public imagePath?: any
+  public image?: any
 
   // FORM //
 
@@ -107,6 +109,16 @@ export class UserMasterComponent {
    ? 'bg-slate-500 placeholder:text-slate-200'
    : 'bg-slate-200'
  }
+
+ onFileSelect(input: any) {
+  this.image = input.files[0]
+  const reader = new FileReader();
+  reader.onload = (e: any) => {
+    this.imagePath = e.target.result;
+  };
+  reader.readAsDataURL(this.image!);
+  this.updateImage()
+}
 
 
   constructor(
@@ -203,12 +215,15 @@ export class UserMasterComponent {
   }
 
   edit(data: KeycloakModel): void {
+    console.log(data);
+
     this.currentId = data.user_id
     this.firstname?.setValue(data.firstname!)
     this.lastname?.setValue(data.lastname!)
     this.username?.setValue(data.username!)
     this.email?.setValue(data.email!)
     this.createMode = false
+    this.imagePath = data.avatar?.avatar_url
     this.openForm()
   }
 
@@ -229,6 +244,31 @@ export class UserMasterComponent {
             this.isLoadingForm = false
             this.resetForm()
             this.getData()
+            this.openSnackBar(true)
+
+          } else {
+            this.isLoadingForm = false
+            this.openSnackBar(false)
+
+          }
+        },
+        error: (err) => {
+          this.isLoadingForm = false
+          this.openSnackBar(false)
+
+        },
+      })
+    }
+  }
+
+  updateImage(){
+    if(this.image != undefined){
+      this.apiService.updateAvatarUser(this.image, this.currentId!).subscribe({
+        next: (res) => {
+          console.log(res);
+
+          if (res.message == 'Success') {
+            this.isLoadingForm = false
             this.openSnackBar(true)
 
           } else {
