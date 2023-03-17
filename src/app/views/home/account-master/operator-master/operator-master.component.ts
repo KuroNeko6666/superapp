@@ -224,7 +224,7 @@ export class OperatorMasterComponent {
           if (res.message == 'Success') {
             this.resetForm()
             this.getData()
-            this.openSnackBar(false)
+            this.openSnackBar(true)
 
           } else {
             //error here

@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ActivityInterface } from 'src/app/data/interfaces/activity-interface';
 import { KeycloakInterface } from 'src/app/data/interfaces/keycloak-interface';
 import { KeycloakUpdateInterface } from 'src/app/data/interfaces/keycloak-update-interface';
@@ -26,15 +26,18 @@ export class ApiService {
 
   get headers() {
     let token : string | null = localStorage.getItem('keyToken')
-    return {'Authorization' : 'Bearer ' + token}
+    return {
+      'Authorization' : 'Bearer ' + token,
+      'apiKey' : '3176d6c6e76884149f4b8f70da874a240ca472b9ae655d5a27fd9c961eef6f61'
+    }
   }
 
   login(data: LoginInterface): Observable<ResponseModel>{
-    return this.http.post<ResponseModel>(this.url.login, data)
+    return this.http.post<ResponseModel>(this.url.login, data, {headers: this.headers})
   }
 
   register(data: RegisterInterface): Observable<ResponseModel>{
-    return this.http.post<ResponseModel>(this.url.register, data)
+    return this.http.post<ResponseModel>(this.url.register, data, {headers: this.headers})
   }
 
   checkLogin() : boolean {
@@ -53,7 +56,7 @@ export class ApiService {
   // ===== USER SECTION ===== //
 
   getAllAccount() : Observable<ResponseModel>{
-    return this.http.get<ResponseModel>(this.url.user.all, {headers: this.headers})
+    return this.http.get<ResponseModel>(this.url.user.get_all, {headers: this.headers})
   }
 
   getAllOperator() : Observable<ResponseModel>{
@@ -65,7 +68,7 @@ export class ApiService {
   }
 
   findAccount(id: number): Observable<ResponseModel>{
-    return this.http.get<ResponseModel>((this.url.user.base + id), {headers: this.headers})
+    return this.http.get<ResponseModel>((this.url.user.get + id), {headers: this.headers})
   }
 
   createAccount(data: RegisterInterface): Observable<ResponseModel>{
@@ -73,21 +76,22 @@ export class ApiService {
   }
 
   updateAccount(data: UserInterface, id: number): Observable<ResponseModel>{
-    return this.http.put<ResponseModel>((this.url.user.base + `/u/` + id), data, {headers: this.headers})
+    return this.http.put<ResponseModel>((this.url.user.update + id), data, {headers: this.headers})
   }
 
   deleteAccount(id: number): Observable<ResponseModel>{
-    return this.http.delete<ResponseModel>((this.url.user.base + '/d/' + id), {headers: this.headers})
+    return this.http.delete<ResponseModel>((this.url.user.delete + id), {headers: this.headers})
   }
 
   // ===== ACTIVITY SECTION ===== //
 
   getAllActivity() : Observable<ResponseModel>{
-    return this.http.get<ResponseModel>(this.url.activity.all, {headers: this.headers})
+    console.log(this.headers);
+    return this.http.get<ResponseModel>(this.url.activity.get_all, {headers: this.headers})
   }
 
   findActivity(id: number): Observable<ResponseModel>{
-    return this.http.get<ResponseModel>((this.url.activity.base + id), {headers: this.headers})
+    return this.http.get<ResponseModel>((this.url.activity.get + id), {headers: this.headers})
   }
 
   createActivity(data: ActivityInterface): Observable<ResponseModel>{
@@ -112,31 +116,26 @@ export class ApiService {
         formData.append('images', iterator)
       }
     }
-    console.log({
-      activity_name: formData.get('activity_name'),
-      place: formData.get('place'),
-      time: formData.get('time'),
-      image: formData.getAll('images'),
-    });
     return this.http.put<ResponseModel>(this.url.activity.update + id, formData, {headers: this.headers})
   }
 
   deleteActivity(id: number): Observable<ResponseModel>{
-    return this.http.delete<ResponseModel>((this.url.activity.base + 'd/' + id), {headers: this.headers})
+    return this.http.delete<ResponseModel>((this.url.activity.delete + id), {headers: this.headers})
   }
 
   deleteImageActivity(id: number, id_img: number): Observable<ResponseModel>{
-    return this.http.delete<ResponseModel>(this.url.activity.delete_img + `/` + id + `/` + id_img, {headers: this.headers})
+    return this.http.delete<ResponseModel>(this.url.activity.delete_image + id + `/` + id_img, {headers: this.headers})
   }
 
   // ===== NEWS SECTION ===== //
 
   getAllNews() : Observable<ResponseModel>{
-    return this.http.get<ResponseModel>(this.url.news.all, {headers: this.headers})
+
+    return this.http.get<ResponseModel>(this.url.news.get_all, {headers: this.headers})
   }
 
   findNews(id: number): Observable<ResponseModel>{
-    return this.http.get<ResponseModel>((this.url.news.base + id), {headers: this.headers})
+    return this.http.get<ResponseModel>((this.url.news.get + id), {headers: this.headers})
   }
 
   createNews(data: NewsInterface): Observable<ResponseModel>{
@@ -145,7 +144,6 @@ export class ApiService {
     formData.append('content', data.content)
     formData.append('thumbnail', data.thumbnail)
     formData.append('source', data.source)
-    console.log(data);
 
     return this.http.post<ResponseModel>(this.url.news.create, formData, {headers: this.headers})
   }
@@ -156,21 +154,21 @@ export class ApiService {
     formData.append('content', data.content)
     formData.append('thumbnail', data.thumbnail == undefined ? null : data.thumbnail)
     formData.append('source', data.source)
-    return this.http.put<ResponseModel>((this.url.news.base+ `/u/` +id), formData, {headers: this.headers})
+    return this.http.put<ResponseModel>((this.url.news.update + id), formData, {headers: this.headers})
   }
 
   deleteNews(id: number): Observable<ResponseModel>{
-    return this.http.delete<ResponseModel>((this.url.news.base + '/d/' + id), {headers: this.headers})
+    return this.http.delete<ResponseModel>((this.url.news.delete + id), {headers: this.headers})
   }
 
   // === CREATE KEYCLOAK === //
 
   getAllUser() : Observable<ResponseModel>{
-    return this.http.get<ResponseModel>(this.url.keycloak.all, {headers: this.headers})
+    return this.http.get<ResponseModel>(this.url.keycloak.get_all, {headers: this.headers})
   }
 
   findUser(id: number): Observable<ResponseModel>{
-    return this.http.get<ResponseModel>((this.url.keycloak.find + id), {headers: this.headers})
+    return this.http.get<ResponseModel>((this.url.keycloak.get + id), {headers: this.headers})
   }
 
   createUser(data: KeycloakInterface): Observable<ResponseModel>{
@@ -188,7 +186,7 @@ export class ApiService {
   updateAvatarUser(data: Blob, id:number): Observable<ResponseModel>{
     let formData = new FormData()
     formData.append('avatar', data)
-    return this.http.put<ResponseModel>((this.url.user.avatar + id), formData, {headers: this.headers})
+    return this.http.put<ResponseModel>((this.url.keycloak.change_avatar + id), formData, {headers: this.headers})
   }
 
 }
